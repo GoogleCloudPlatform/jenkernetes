@@ -28,8 +28,7 @@ public class KubeCreateStep extends KubeStep {
     this.data = data;
   }
   
-  @Extension
-  public static class DescriptorImpl extends AbstractStepDescriptorImpl{
+  @Extension public static final class DescriptorImpl extends AbstractStepDescriptorImpl{
     
     public DescriptorImpl() {
       super(Execution.class);

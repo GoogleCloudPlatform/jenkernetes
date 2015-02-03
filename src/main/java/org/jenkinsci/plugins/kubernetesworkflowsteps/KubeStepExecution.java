@@ -31,7 +31,7 @@ public abstract class KubeStepExecution<T extends HttpRequestBase, S extends Kub
   @Override
   protected String run() throws Exception {
     CloseableHttpClient httpclient = HttpClients.createDefault();
-    HttpHost target = new HttpHost(env.get("KUBERNETES_SERVICE_HOST", "0.0.0.0"), Integer.valueOf(env.get("KUBERNETES_SERVICE_PORT", "0000")));
+    HttpHost target = new HttpHost(env.expand("KUBERNETES_SERVICE_HOST"), Integer.valueOf(env.expand("KUBERNETES_SERVICE_PORT")));
     CloseableHttpResponse httpresponse = httpclient.execute(target, request());
     try{
       return httpresponse.getEntity().getContent().toString();

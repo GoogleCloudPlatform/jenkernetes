@@ -29,8 +29,7 @@ public class KubeUpdateStep extends KubeStep {
     this.id = id;
   }
   
-  @Extension
-  public static class DescriptorImpl extends AbstractStepDescriptorImpl{
+  @Extension public static final class DescriptorImpl extends AbstractStepDescriptorImpl{
 
     public DescriptorImpl() {
       super(Execution.class);
@@ -65,5 +64,7 @@ public class KubeUpdateStep extends KubeStep {
     }
     
   }
-  
+
+
+
 }
