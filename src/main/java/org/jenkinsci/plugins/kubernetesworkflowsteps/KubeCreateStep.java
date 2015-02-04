@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class KubeCreateStep extends KubeStep {
 
-  public transient Map<?,?> data;
+  public final transient Map<?,?> data;
   
   /**
    * @param resource
@@ -46,7 +46,7 @@ public class KubeCreateStep extends KubeStep {
     
   }
   
-  public static class Execution extends KubeStepExecution<HttpPost, KubeCreateStep>{
+  public static final class Execution extends KubeStepExecution<HttpPost, KubeCreateStep>{
 
     /* (non-Javadoc)
      * @see org.jenkinsci.plugins.kubernetesworkflowsteps.KubeStepExecution#request()
