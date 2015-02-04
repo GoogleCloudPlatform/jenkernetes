@@ -13,7 +13,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class KubeDeleteStep extends KubeStep {
 
-  public final transient String id;
+  public transient String id;
   
   /**
    * @param resource
@@ -45,7 +45,7 @@ public class KubeDeleteStep extends KubeStep {
   }
   
   
-  public static final class Execution extends KubeStepExecution<HttpDelete, KubeDeleteStep>{
+  public static class Execution extends KubeStepExecution<HttpDelete, KubeDeleteStep>{
     
     /* (non-Javadoc)
      * @see org.jenkinsci.plugins.kubernetesworkflowsteps.KubeStepExecution#request()

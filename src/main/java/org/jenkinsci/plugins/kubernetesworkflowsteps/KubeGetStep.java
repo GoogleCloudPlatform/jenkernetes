@@ -12,7 +12,7 @@ import hudson.Extension;
 public class KubeGetStep extends KubeStep {
 
 
-  public final transient String id;
+  public transient String id;
   
   /**
    * @param resource
@@ -42,7 +42,7 @@ public class KubeGetStep extends KubeStep {
   }
   
   
-  public static final class Execution extends KubeStepExecution<HttpGet, KubeGetStep>{
+  public static class Execution extends KubeStepExecution<HttpGet, KubeGetStep>{
     
     /* (non-Javadoc)
      * @see org.jenkinsci.plugins.kubernetesworkflowsteps.KubeStepExecution#request()
