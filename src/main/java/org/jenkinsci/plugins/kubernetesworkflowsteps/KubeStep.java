@@ -7,7 +7,7 @@ import org.jenkinsci.plugins.workflow.steps.AbstractStepImpl;
  */
 public abstract class KubeStep extends AbstractStepImpl{
 
-  public transient String resource;
+  public final transient String resource;
   
   public KubeStep(String resource){
     this.resource = resource;

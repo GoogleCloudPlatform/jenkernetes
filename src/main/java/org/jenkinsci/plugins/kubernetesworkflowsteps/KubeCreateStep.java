@@ -9,7 +9,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 import hudson.Extension;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 /**
@@ -17,7 +16,7 @@ import java.util.Map;
  */
 public class KubeCreateStep extends KubeStep {
 
-  public transient Map<?,?> data;
+  public final transient Map<?,?> data;
   
   /**
    * @param resource
@@ -46,18 +45,18 @@ public class KubeCreateStep extends KubeStep {
     
   }
   
-  public static class Execution extends KubeStepExecution<HttpPost, KubeCreateStep>{
+  public static class Execution extends KubeStepExecution<KubeCreateStep>{
 
     /* (non-Javadoc)
      * @see org.jenkinsci.plugins.kubernetesworkflowsteps.KubeStepExecution#request()
      */
     @Override
-    protected HttpPost request() throws UnsupportedEncodingException {
+    protected String run() throws Exception {
       StringEntity entity = new StringEntity((new Gson()).toJson(step.data));
       entity.setContentType("application/json");
-      HttpPost post = new HttpPost("/"+step.resource);
+      HttpPost post = new HttpPost(this.prefix+step.resource);
       post.setEntity(entity);
-      return post;
+      return parse(makeCall(post, this.readWriteHost, this.readWritePort));
     }
     
   }

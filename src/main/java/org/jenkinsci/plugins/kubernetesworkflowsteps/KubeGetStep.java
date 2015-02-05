@@ -4,6 +4,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.jenkinsci.plugins.workflow.steps.AbstractStepDescriptorImpl;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+
 import hudson.Extension;
 
 /**
@@ -12,7 +13,7 @@ import hudson.Extension;
 public class KubeGetStep extends KubeStep {
 
 
-  public transient String id;
+  public final transient String id;
   
   /**
    * @param resource
@@ -42,14 +43,12 @@ public class KubeGetStep extends KubeStep {
   }
   
   
-  public static class Execution extends KubeStepExecution<HttpGet, KubeGetStep>{
-    
-    /* (non-Javadoc)
-     * @see org.jenkinsci.plugins.kubernetesworkflowsteps.KubeStepExecution#request()
-     */
+  public static class Execution extends KubeStepExecution<KubeGetStep>{
+
     @Override
-    protected HttpGet request() {
-      return new HttpGet("/"+step.resource+"/"+step.id);
+    protected String run() throws Exception {
+      return parse(makeCall(new HttpGet(this.prefix+step.resource+"/"+step.id),
+          this.readOnlyHost, this.readOnlyPort));
     }
   }
 }
