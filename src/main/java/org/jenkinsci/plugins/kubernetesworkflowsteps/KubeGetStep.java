@@ -46,7 +46,7 @@ public class KubeGetStep extends KubeStep {
   public static class Execution extends KubeStepExecution<KubeGetStep>{
 
     @Override
-    protected String run() throws Exception {
+    protected Object run() throws Exception {
       return parse(makeCall(new HttpGet(this.prefix+step.resource+"/"+step.id),
           this.readOnlyHost, this.readOnlyPort));
     }

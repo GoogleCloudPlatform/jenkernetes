@@ -45,7 +45,7 @@ public class KubeDeleteStep extends KubeStep {
   
   public static class Execution extends KubeStepExecution<KubeDeleteStep>{
     @Override
-    protected String run() throws Exception {
+    protected Object run() throws Exception {
       return parse(makeCall(new HttpDelete(this.prefix+step.resource+"/"+step.id),
           this.readWriteHost,
           this.readWritePort));
