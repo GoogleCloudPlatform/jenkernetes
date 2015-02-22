@@ -56,7 +56,12 @@ public class KubeCreateStep extends KubeStep {
   
   public static class Execution extends KubeStepExecution<KubeCreateStep>{
 
-    /* (non-Javadoc)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8821023885822732793L;
+
+	/* (non-Javadoc)
      * @see org.jenkinsci.plugins.kubernetesworkflowsteps.KubeStepExecution#request()
      */
     @Override

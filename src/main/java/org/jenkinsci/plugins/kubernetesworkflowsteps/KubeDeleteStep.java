@@ -60,7 +60,12 @@ public class KubeDeleteStep extends KubeStep {
   
   
   public static class Execution extends KubeStepExecution<KubeDeleteStep>{
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8744753060764046953L;
+
+	@Override
     protected Object run() throws Exception {
       return parse(makeCall(new HttpDelete(this.prefix+step.resource+"/"+step.id),
           this.readWriteHost,

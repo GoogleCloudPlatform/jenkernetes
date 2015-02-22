@@ -42,7 +42,11 @@ import javax.inject.Inject;
  */
 public abstract class KubeStepExecution<S extends KubeStep> extends AbstractSynchronousStepExecution<Object>{
   
-  @Inject protected transient S step;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5260746262819154146L;
+@Inject protected transient S step;
   protected final Map<String,String> env = EnvVars.masterEnvVars; 
   protected final String readOnlyHost = env.get("KUBERNETES_RO_SERVICE_HOST");
   protected final String readWriteHost = env.get("KUBERNETES_SERVICE_HOST");

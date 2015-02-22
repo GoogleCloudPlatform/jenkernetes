@@ -59,7 +59,12 @@ public class KubeGetStep extends KubeStep {
   
   public static class Execution extends KubeStepExecution<KubeGetStep>{
 
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1046986151380438848L;
+
+	@Override
     protected Object run() throws Exception {
       return parse(makeCall(new HttpGet(this.prefix+step.resource+"/"+step.id),
           this.readOnlyHost, this.readOnlyPort));
