@@ -66,8 +66,7 @@ public class KubeGetStep extends KubeStep {
 
 	@Override
     protected Object run() throws Exception {
-      return parse(makeCall(new HttpGet(this.prefix+step.resource+"/"+step.id),
-          this.readOnlyHost, this.readOnlyPort));
+      return parse(makeCall(new HttpGet(KubeStepExecution.prefix+step.resource+"/"+step.id)));
     }
   }
 }

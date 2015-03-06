@@ -66,9 +66,9 @@ public class KubeCreateStep extends KubeStep {
      */
     @Override
     protected Object run() throws Exception {
-      HttpPost post = new HttpPost(this.prefix+step.resource);
+      HttpPost post = new HttpPost(KubeStepExecution.prefix+step.resource);
       post.setEntity(toEntity(step.payload));
-      return parse(makeCall(post, this.readWriteHost, this.readWritePort));
+      return parse(makeCall(post));
     }
     
   }

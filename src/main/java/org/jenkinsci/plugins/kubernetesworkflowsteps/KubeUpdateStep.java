@@ -73,9 +73,9 @@ public class KubeUpdateStep extends KubeStep {
      */
     @Override
     protected Object run() throws Exception {
-      HttpPut put = new HttpPut(this.prefix+step.resource+"/"+step.id);
+      HttpPut put = new HttpPut(KubeStepExecution.prefix+step.resource+"/"+step.id);
       put.setEntity(toEntity(step.payload));
-      return parse(makeCall(put, this.readWriteHost, this.readWritePort));
+      return parse(makeCall(put));
     }
     
   }
