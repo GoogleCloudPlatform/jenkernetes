@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Google Inc. All Rights Reserved.
+ * Copyright 2015 Google Inc. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@ limitations under the License.
 
 package org.jenkinsci.plugins.kubernetesworkflowsteps;
 
-import org.apache.http.client.methods.HttpGet;
 import org.jenkinsci.plugins.workflow.steps.AbstractStepDescriptorImpl;
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -66,7 +65,7 @@ public class KubeGetStep extends KubeStep {
 
 	@Override
     protected Object run() throws Exception {
-      return parse(makeCall(new HttpGet(KubeStepExecution.prefix+step.resource+"/"+step.id)));
+      return KubernetesClient.get(step.resource + "/" + step.id);
     }
   }
 }
