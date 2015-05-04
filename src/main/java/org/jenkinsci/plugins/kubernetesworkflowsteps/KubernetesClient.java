@@ -1,6 +1,9 @@
 package org.jenkinsci.plugins.kubernetesworkflowsteps;
 
 import com.google.common.net.HttpHeaders;
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 
 import groovy.json.JsonBuilder;
 import groovy.json.JsonSlurper;
@@ -24,6 +27,9 @@ import org.apache.http.message.BasicHeader;
 
 import hudson.EnvVars;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -42,112 +48,140 @@ import javax.net.ssl.SSLContext;
  */
 public class KubernetesClient {
 
-  private static final Map<String,String> env = EnvVars.masterEnvVars;
+	private static final class BearerToken {
+		public String BearerToken;
+		@SuppressWarnings("unused")
+		public boolean Insecure;
+	}
 
-  private static CloseableHttpClient rwClient = null;
-  private static final Object RW_CLIENT_LOCK = new Object();
+	private static final Map<String,String> ENV = EnvVars.masterEnvVars;
 
-  private static final CloseableHttpClient roClient = HttpClients.custom()
-      .setDefaultHeaders(Collections.singletonList(
-          new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"))
-          ).build();
+	private static final CloseableHttpClient RO_CLIENT = HttpClients.custom()
+			.setDefaultHeaders(Collections.singletonList(
+					new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"))
+					).build();
 
-  private static final HttpHost RW_HOST = new HttpHost(env.get("KUBERNETES_SERVICE_HOST"),
-      Integer.valueOf(env.get("KUBERNETES_SERVICE_PORT")), "https");
+	private static final String BEARER_TOKEN_PATH = "/var/lib/kubelet/kubernetes.auth.json";
 
-  private static final HttpHost RO_HOST = new HttpHost(env.get("KUBERNETES_RO_SERVICE_HOST"),
-      Integer.valueOf(env.get("KUBERNETES_RO_SERVICE_PORT")), "http");
+	private static final CloseableHttpClient RW_CLIENT; 
 
-  //version string
-  private static final String prefix = "/api/v1beta2/";
+	static {
+		SSLContextBuilder builder = SSLContexts.custom();
+		try {
+			builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-  private static Object parse(CloseableHttpResponse resp) throws IOException{
-    try{
-      return (new JsonSlurper()).parse((new InputStreamReader(resp.getEntity().getContent())));
-    } finally{
-      resp.close();
-    }
-  }
+		SSLContext sslContext = null;
+		try {
+			sslContext = builder.build();
+		} catch (KeyManagementException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-  private static StringEntity toEntity(Object payload) throws UnsupportedEncodingException{
-    return new StringEntity(new JsonBuilder(payload).toString());
-  }
+		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext,
+				SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
-  private static CloseableHttpClient getRWClient() 
-      throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException{
-    if(rwClient == null){
-      synchronized(RW_CLIENT_LOCK){
-        if(rwClient==null){
-          SSLContextBuilder builder = SSLContexts.custom();
-          builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
+		Collection<BasicHeader> headers = new ArrayList<BasicHeader>();
+		headers.add(new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"));
 
-          SSLContext sslContext = builder.build();
+		String bearerToken = null;
+		try {
+			bearerToken = (new Gson()).fromJson(new FileReader(new File(BEARER_TOKEN_PATH)), BearerToken.class).BearerToken;
+		} catch (JsonSyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonIOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		headers.add(new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + bearerToken));
 
-          SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext,
-              SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+		RW_CLIENT = HttpClients.custom()
+				.setDefaultHeaders(headers)
+				.setSSLSocketFactory(sslsf).build();
+	}
 
-          Collection<BasicHeader> headers = new ArrayList<BasicHeader>();
-          headers.add(new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"));
-          headers.add(new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + env.get("BEARER_TOKEN")));
+	private static final HttpHost RW_HOST = new HttpHost(ENV.get("KUBERNETES_SERVICE_HOST"),
+			Integer.valueOf(ENV.get("KUBERNETES_SERVICE_PORT")), "https");
 
-          rwClient = HttpClients.custom()
-              .setDefaultHeaders(headers)
-              .setSSLSocketFactory(sslsf).build();
-        }
-      }
-    }
-    return rwClient;
-  }
+	private static final HttpHost RO_HOST = new HttpHost(ENV.get("KUBERNETES_RO_SERVICE_HOST"),
+			Integer.valueOf(ENV.get("KUBERNETES_RO_SERVICE_PORT")), "http");
 
-  private static <T extends HttpRequestBase> CloseableHttpResponse makeRWCall(T request) 
-      throws ClientProtocolException, IOException, KeyManagementException,
-      NoSuchAlgorithmException, KeyStoreException {
-    return getRWClient().execute(RW_HOST, request);
-  }
+	//version string
+	private static final String PREFIX = "/api/v1beta3/";
 
-  private static CloseableHttpResponse makeROCall(HttpGet request) 
-      throws ClientProtocolException, IOException {  
-    return roClient.execute(RO_HOST, request);
-  }
+	private static Object parse(CloseableHttpResponse resp) throws IOException{
+		try{
+			return (new JsonSlurper()).parse((new InputStreamReader(resp.getEntity().getContent())));
+		} finally{
+			resp.close();
+		}
+	}
 
+	private static StringEntity toEntity(Object payload) throws UnsupportedEncodingException{
+		return new StringEntity(new JsonBuilder(payload).toString());
+	}
 
-  public static Object get(String path) 
-      throws ClientProtocolException, 
-      IOException {
-    return parse(makeROCall(new HttpGet(prefix.concat(path))));
-  }
+	private static <T extends HttpRequestBase> CloseableHttpResponse makeRWCall(T request) 
+			throws ClientProtocolException, IOException, KeyManagementException,
+			NoSuchAlgorithmException, KeyStoreException {
+		return RW_CLIENT.execute(RW_HOST, request);
+	}
 
-  public static Object delete(String path) 
-      throws KeyManagementException,
-      ClientProtocolException,
-      NoSuchAlgorithmException,
-      KeyStoreException, 
-      IOException{  
-    return parse(makeRWCall(new HttpDelete(prefix.concat(path))));
-  }
-
-  public static Object create(String path, Object payload) 
-      throws KeyManagementException,
-      ClientProtocolException,
-      NoSuchAlgorithmException,
-      KeyStoreException, 
-      IOException{
-    HttpPost post = new HttpPost(prefix.concat(path));
-    post.setEntity(toEntity(payload));    
-    return parse(makeRWCall(post));
-  }
-
-  public static Object update(String path, Object payload) 
-      throws KeyManagementException,
-      ClientProtocolException,
-      NoSuchAlgorithmException,
-      KeyStoreException, 
-      IOException{
-
-    HttpPut put = new HttpPut(prefix.concat(path));
-    put.setEntity(toEntity(payload));
-    return parse(makeRWCall(put));
-  }
+	private static CloseableHttpResponse makeROCall(HttpGet request) 
+			throws ClientProtocolException, IOException {  
+		return RO_CLIENT.execute(RO_HOST, request);
+	}
 
 
+	public static Object get(String path) 
+			throws ClientProtocolException, 
+			IOException {
+		return parse(makeROCall(new HttpGet(PREFIX.concat(path))));
+	}
+
+	public static Object delete(String path) 
+			throws KeyManagementException,
+			ClientProtocolException,
+			NoSuchAlgorithmException,
+			KeyStoreException, 
+			IOException{  
+		return parse(makeRWCall(new HttpDelete(PREFIX.concat(path))));
+	}
+
+	public static Object create(String path, Object payload) 
+			throws KeyManagementException,
+			ClientProtocolException,
+			NoSuchAlgorithmException,
+			KeyStoreException, 
+			IOException{
+		HttpPost post = new HttpPost(PREFIX.concat(path));
+		post.setEntity(toEntity(payload));    
+		return parse(makeRWCall(post));
+	}
+
+	public static Object update(String path, Object payload) 
+			throws KeyManagementException,
+			ClientProtocolException,
+			NoSuchAlgorithmException,
+			KeyStoreException, 
+			IOException{
+
+		HttpPut put = new HttpPut(PREFIX.concat(path));
+		put.setEntity(toEntity(payload));
+		return parse(makeRWCall(put));
+	}
 }
