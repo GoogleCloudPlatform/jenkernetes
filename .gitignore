@@ -2,3 +2,4 @@ plugin/setup/bearer_token.json
 plugin/setup/kubernetes_auth
 plugin/target
 client/target
+.*
