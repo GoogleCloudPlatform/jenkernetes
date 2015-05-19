@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <!-- Baseline Jenkins version you use to build and test the plugin. Users must have this version or newer to run. -->
-    <version>1.580.1</version>
-    <relativePath/>
+    <version>1.596.2</version>
+    <relativePath></relativePath>
   </parent>
-  <groupId>org.jenkins-ci.plugins</groupId>
-  <artifactId>kubernetes-workflow-steps</artifactId>
-  <version>1.0</version>
-  <packaging>hpi</packaging>
 
-  <name>Kubernetes Workflow Steps</name>
-  <description>Adds workflow step instructions for the Kubernetes API</description>
-  <url>https://wiki.jenkins-ci.org/display/JENKINS/Kubernetes+workflow+steps</url>
+  <groupId>org.jenkins-ci.plugins</groupId>
+  <artifactId>jenkernetes</artifactId>
+  <version>1.0</version>
+  <packaging>pom</packaging>
+
+  <name>Jenkernetes</name>
+  <description>Parent POM for tools to run Jenkins on Kubernetes</description>
   <licenses>
     <license>
       <name>Apache 2.0 License</name>
@@ -31,42 +29,20 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git://github.com/jenkinsci/kubernetes-workflow-steps-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:jenkinsci/kubernetes-workflow-steps-plugin-plugin.git</developerConnection>
-    <url>http://github.com/jenkinsci/kubernetes-workflow-steps-plugin-plugin</url>
+    <connection>scm:git:git://github.com/jenkinsci/jenkernetes.git</connection>
+    <developerConnection>scm:git:git@github.com:jenkinsci/jenkernetes.git</developerConnection>
+    <url>http://github.com/jenkinsci/jenkernetes</url>
   </scm>
   <repositories>
     <repository>
       <id>repo.jenkins-ci.org</id>
       <url>http://repo.jenkins-ci.org/public/</url>
     </repository>
- </repositories>
+  </repositories>
   <pluginRepositories>
     <pluginRepository>
       <id>repo.jenkins-ci.org</id>
       <url>http://repo.jenkins-ci.org/public/</url>
     </pluginRepository>
   </pluginRepositories>
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore</artifactId>
-      <version>4.4</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jenkins-ci.plugins.workflow</groupId>
-      <artifactId>workflow-api</artifactId>
-      <version>1.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>4.3.6</version>
-    </dependency>
-	<dependency>
-		<groupId>com.google.code.gson</groupId>
-		<artifactId>gson</artifactId>
-		<version>2.3.1</version>
-	</dependency>
-  </dependencies>
 </project>

@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.kubernetesworkflowsteps;
+package org.jenkinsci.plugins.jenkernetes.workflowsteps;
 
 import com.google.common.net.HttpHeaders;
 import com.google.gson.Gson;
@@ -61,7 +61,7 @@ public class KubernetesClient {
 					new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"))
 					).build();
 
-	private static final String BEARER_TOKEN_PATH = "/var/lib/kubelet/kubernetes.auth.json";
+	private static final String BEARER_TOKEN_PATH = "/var/lib/kubelet-bearer-token.json";
 
 	private static final CloseableHttpClient RW_CLIENT; 
 
@@ -121,7 +121,7 @@ public class KubernetesClient {
 			Integer.valueOf(ENV.get("KUBERNETES_RO_SERVICE_PORT")), "http");
 
 	//version string
-	private static final String PREFIX = "/api/v1beta3/";
+	private static final String PREFIX = "/api/v1beta3/namespaces/default/";
 
 	private static Object parse(CloseableHttpResponse resp) throws IOException{
 		try{
@@ -136,8 +136,7 @@ public class KubernetesClient {
 	}
 
 	private static <T extends HttpRequestBase> CloseableHttpResponse makeRWCall(T request) 
-			throws ClientProtocolException, IOException, KeyManagementException,
-			NoSuchAlgorithmException, KeyStoreException {
+			throws ClientProtocolException, IOException {
 		return RW_CLIENT.execute(RW_HOST, request);
 	}
 
@@ -154,19 +153,13 @@ public class KubernetesClient {
 	}
 
 	public static Object delete(String path) 
-			throws KeyManagementException,
-			ClientProtocolException,
-			NoSuchAlgorithmException,
-			KeyStoreException, 
+			throws ClientProtocolException,
 			IOException{  
 		return parse(makeRWCall(new HttpDelete(PREFIX.concat(path))));
 	}
 
 	public static Object create(String path, Object payload) 
-			throws KeyManagementException,
-			ClientProtocolException,
-			NoSuchAlgorithmException,
-			KeyStoreException, 
+			throws ClientProtocolException,
 			IOException{
 		HttpPost post = new HttpPost(PREFIX.concat(path));
 		post.setEntity(toEntity(payload));    
@@ -174,10 +167,7 @@ public class KubernetesClient {
 	}
 
 	public static Object update(String path, Object payload) 
-			throws KeyManagementException,
-			ClientProtocolException,
-			NoSuchAlgorithmException,
-			KeyStoreException, 
+			throws ClientProtocolException,
 			IOException{
 
 		HttpPut put = new HttpPut(PREFIX.concat(path));

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package org.jenkinsci.plugins.kubernetesworkflowsteps;
+package org.jenkinsci.plugins.jenkernetes.workflowsteps;
 
 import org.jenkinsci.plugins.workflow.steps.AbstractStepDescriptorImpl;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -26,18 +26,18 @@ import hudson.Extension;
 public class KubeUpdateStep extends KubeStep {
 
   public final transient Object payload;
-  public final transient String id;
+  public final transient String name;
   
   /**
    * @param resource A String that is one of { "pods", "services", "replicationControllers" }
-   * @param id A String giving the id ("name") of the resource to be updated
+   * @param name A String giving the id ("name") of the resource to be updated
    * @param payload A Groovy Map that defines the resource according to the Kubernetes API
    */
   @DataBoundConstructor
-  public KubeUpdateStep(String resource, String id, Object payload) {
+  public KubeUpdateStep(String resource, String name, Object payload) {
     super(resource);
     this.payload = payload;
-    this.id = id;
+    this.name = name;
   }
   
   @Extension public static final class DescriptorImpl extends AbstractStepDescriptorImpl{
@@ -72,7 +72,7 @@ public class KubeUpdateStep extends KubeStep {
      */
     @Override
     protected Object run() throws Exception {
-      return KubernetesClient.update(step.resource + "/" + step.id, step.payload);
+      return KubernetesClient.update(step.resource + "/" + step.name, step.payload);
     }
     
   }

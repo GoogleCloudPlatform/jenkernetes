@@ -14,7 +14,7 @@
  *limitations under the License.
  */
 
-package org.jenkinsci.plugins.kubernetesworkflowsteps;
+package org.jenkinsci.plugins.jenkernetes.workflowsteps;
 
 import org.jenkinsci.plugins.workflow.steps.AbstractStepDescriptorImpl;
 import org.kohsuke.stapler.DataBoundConstructor;

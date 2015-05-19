@@ -1,0 +1,44 @@
+{
+	"metadata": {
+		"name": "jenkinsmaster",
+		"labels": {
+			"role": "master"
+		}
+	},
+	"apiVersion": "v1beta3",
+	"kind": "Pod",
+	"spec": {
+		"containers":[
+			{
+				"name": "jenkinsmaster",
+				"image": "elibixby/jenkins_master",
+				"imagePullPolicy": "Always",
+				"ports": [
+					{
+						"name": "webui",
+						"containerPort": 8080
+					},
+					{
+						"name": "slavelistener",
+						"containerPort": 50000
+					}
+				],
+				"volumeMounts": [
+					{
+						"name": "kubernetesauth",
+						"mountPath": "/var/lib"
+					}
+
+				]
+			}
+		],
+		"volumes": [
+			{
+				"name": "kubernetesauth",
+				"secret": {
+					"secretName": "kubelet-bearer-token"
+				}
+			}
+		]
+	}
+}

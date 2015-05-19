@@ -1,52 +1,20 @@
-## Project name
+## Jenkernetes
 
-A description of what this project does and who it serves.
+This repository contains two tools for running a Jenkins server on Kubernetes
 
-Include authorship, support contact and release information.
+* [kubernetes-swarm-client](client/README.md): A client jar which connects a container running in a Kubernetes cluster with a Jenkins server running in the same cluster
+* [kubernetes-workflow-steps](plugin/README.md): A Jenkins plugin which allows [workflow-scripts](https://github.com/jenkinsci/workflow-plugin) to provision Kubernetes resources (e.g. pods, replication controllers).
 
-
-## Project setup, installation, and configuration
-
-How do I, as a developer, start working on the project?
-
-1. What dependencies does it have (where are they expressed) and how do I install them?
-1. Can I see the project working before I change anything?
+Combined, these two tools allow users to specify both the workflow and environment for a build in a workflow-script that can be stored along side the code in your SCM.
 
 
-## Testing
+## Setup
 
-How do I run the project's automated tests?
-
-* Unit Tests
-
-* Integration Tests
-
-
-## Deploying
-
-### How to setup the deployment environment
-
-* Addons, packages, or other dependencies required for deployment.
-* Required environment variables or credentials not included in git.
-* Monitoring services and logging.
-
-### How to deploy
-
-
-## Troubleshooting & useful tools
-
-### Examples of common tasks
-
-e.g.
-* How to make curl requests while authenticated via oauth.
-* How to monitor background jobs.
-* How to run the app through a proxy.
-
+Take a look at the README files for the [swarm-client](client/README.md) or the [workflow-steps-plugin](plugin/README.md) for more in depth instructions on setting up and using these tools.
 
 ## Contributing changes
 
-* See [CONTRIB.md](CONTRIB.md)
-
+* See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Licensing
 

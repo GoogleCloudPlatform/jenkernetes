@@ -14,33 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package org.jenkinsci.plugins.kubernetesworkflowsteps;
+package org.jenkinsci.plugins.jenkernetes.workflowsteps;
 
 import org.jenkinsci.plugins.workflow.steps.AbstractStepDescriptorImpl;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+
 import hudson.Extension;
 
-/**
- * Step Object associated with deleting a Kubernetes resource
- */ 
-public class KubeDeleteStep extends KubeStep {
+public class KubeGetStep extends KubeStep {
 
-  public final transient String id;
+
+  public final transient String name;
   
   /**
    * @param resource A String that is one of { "pods", "services", "replicationControllers" }
-   * @param id A String giving the id ("name") of the resource to be deleted
+   * @param name A String giving the id ("name") of the resource to be retrieved
    */
   @DataBoundConstructor
-  public KubeDeleteStep(String resource, String id) {
+  public KubeGetStep(String resource, String name) {
     super(resource);
-    this.id = id;
+    this.name = name;
   }
-  
-  @Extension public static final class DescriptorImpl 
-  extends AbstractStepDescriptorImpl{
 
+  @Extension public static final class DescriptorImpl extends AbstractStepDescriptorImpl{
 
     public DescriptorImpl() {
       super(Execution.class);
@@ -48,26 +45,27 @@ public class KubeDeleteStep extends KubeStep {
     
     @Override
     public String getFunctionName(){
-      return "kube_delete";
+      return "kube_get";
     }
     
     @Override
     public String getDisplayName(){
-      return "Delete a resource using the Kubernetes API";
+      return "Get a resource using the Kubernetes API";
     }
     
   }
   
   
-  public static class Execution extends KubeStepExecution<KubeDeleteStep>{
+  public static class Execution extends KubeStepExecution<KubeGetStep>{
+
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = 8744753060764046953L;
+	private static final long serialVersionUID = -1046986151380438848L;
 
 	@Override
     protected Object run() throws Exception {
-      return KubernetesClient.delete(step.resource + "/" + step.id);
+      return KubernetesClient.get(step.resource + "/" + step.name);
     }
   }
 }
