@@ -17,16 +17,12 @@ There are two main ways of using this client.
 ### Extension
 
 1. Extend the desired Docker image adding the jar as an ENTRYPOINT.
-
 For example, you could use the [example Dockerfile](client/examples/image/Dockerfile) to create a Jenkins slave with gcloud SDK installed.
-
 2. Build and push the image
-
 ```
 sudo docker build -t <mydockerhubid>/jenkins-cloud-sdk-slave client/examples/image/
 sudo docker push <mydockerhubid>/jenkins-cloud-sdk-slave
 ```
-
 3. Create a pod with the given image.
 ```
 kubectl create -f client/examples/basic_config.json
@@ -39,9 +35,7 @@ The next method allows you to use Docker images as jenkins slaves out-of-the-box
 ### Volume Mounting
 
 1. Add the Jar to a [volume](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/volumes.md) in your cluster:
-
 Depending on your cloud provider, these instructions will vary. As elsewhere, we use Google Container Engine as an example, in this case creating a Google Compute Engine Persistent Disk. We use the smallest size available, and a persistent disk to avoid iops limitations when the volume is mounted on a large number of vms.
-
 ```
 gcloud compute disks create swarm-client --type pd-ssd --size 10GB
 gcloud compute instances create temp-writer --disk name=swarm-client,device-name=swarm-client \
@@ -50,11 +44,8 @@ gcloud compute copy-files ./client/target/kubernetes-swarm-client-jar-with-depen
 gcloud compute ssh temp-writer --command "sudo umount /mnt/swarm-client"
 gcloud compute instances delete temp-writer
 ```
-
 NOTE: You only need to run this once per cluster. After the volume is created, it can be mounted on any number of containers as a read-only volume.
-
 2. Now we can make out-of-the-box images into Jenkins Slaves by mounting our volume "swarm-client" on the container, and running the script.
-
 ```
 kubectl create -f client/examples/volume-mounting-config.json
 ```
