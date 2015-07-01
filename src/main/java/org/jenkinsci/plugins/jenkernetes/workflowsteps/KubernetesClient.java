@@ -25,21 +25,19 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 
-import hudson.EnvVars;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 
@@ -53,17 +51,11 @@ public class KubernetesClient {
 		@SuppressWarnings("unused")
 		public boolean Insecure;
 	}
+	
+	private static final String BEARER_TOKEN_PATH = "/var/run/secrets/kubernetes.io/serviceaccount/token";
 
-	private static final Map<String,String> ENV = EnvVars.masterEnvVars;
-
-	private static final CloseableHttpClient RO_CLIENT = HttpClients.custom()
-			.setDefaultHeaders(Collections.singletonList(
-					new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"))
-					).build();
-
-	private static final String BEARER_TOKEN_PATH = "/var/lib/kubelet-bearer-token.json";
-
-	private static final CloseableHttpClient RW_CLIENT; 
+	private static final CloseableHttpClient CLIENT;
+	private static final HttpHost HOST;
 
 	static {
 		SSLContextBuilder builder = SSLContexts.custom();
@@ -109,18 +101,21 @@ public class KubernetesClient {
 		}
 		headers.add(new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + bearerToken));
 
-		RW_CLIENT = HttpClients.custom()
+		CLIENT = HttpClients.custom()
 				.setDefaultHeaders(headers)
 				.setSSLSocketFactory(sslsf).build();
+		
+		InetAddress kubernetesAddr = null;
+		try {
+		  kubernetesAddr = InetAddress.getByName("kubernetes");
+		} catch (UnknownHostException e) {
+		  e.printStackTrace();
+		}
+		HOST = new HttpHost(kubernetesAddr, 443, "https");
 	}
 
-	private static final HttpHost RW_HOST = new HttpHost(ENV.get("KUBERNETES_SERVICE_HOST"),
-			Integer.valueOf(ENV.get("KUBERNETES_SERVICE_PORT")), "https");
-
-	private static final HttpHost RO_HOST = new HttpHost(ENV.get("KUBERNETES_RO_SERVICE_HOST"),
-			Integer.valueOf(ENV.get("KUBERNETES_RO_SERVICE_PORT")), "http");
-
 	//version string
+	//TODO Add namespace support
 	private static final String PREFIX = "/api/v1beta3/namespaces/default/";
 
 	private static Object parse(CloseableHttpResponse resp) throws IOException{
@@ -135,27 +130,21 @@ public class KubernetesClient {
 		return new StringEntity(new JsonBuilder(payload).toString());
 	}
 
-	private static <T extends HttpRequestBase> CloseableHttpResponse makeRWCall(T request) 
+	private static <T extends HttpRequestBase> CloseableHttpResponse makeCall(T request) 
 			throws ClientProtocolException, IOException {
-		return RW_CLIENT.execute(RW_HOST, request);
+		return CLIENT.execute(HOST, request);
 	}
 
-	private static CloseableHttpResponse makeROCall(HttpGet request) 
-			throws ClientProtocolException, IOException {  
-		return RO_CLIENT.execute(RO_HOST, request);
-	}
-
-
-	public static Object get(String path) 
+    public static Object get(String path) 
 			throws ClientProtocolException, 
 			IOException {
-		return parse(makeROCall(new HttpGet(PREFIX.concat(path))));
+		return parse(makeCall(new HttpGet(PREFIX.concat(path))));
 	}
 
 	public static Object delete(String path) 
 			throws ClientProtocolException,
 			IOException{  
-		return parse(makeRWCall(new HttpDelete(PREFIX.concat(path))));
+		return parse(makeCall(new HttpDelete(PREFIX.concat(path))));
 	}
 
 	public static Object create(String path, Object payload) 
@@ -163,7 +152,7 @@ public class KubernetesClient {
 			IOException{
 		HttpPost post = new HttpPost(PREFIX.concat(path));
 		post.setEntity(toEntity(payload));    
-		return parse(makeRWCall(post));
+		return parse(makeCall(post));
 	}
 
 	public static Object update(String path, Object payload) 
@@ -172,6 +161,6 @@ public class KubernetesClient {
 
 		HttpPut put = new HttpPut(PREFIX.concat(path));
 		put.setEntity(toEntity(payload));
-		return parse(makeRWCall(put));
+		return parse(makeCall(put));
 	}
 }

@@ -10,6 +10,7 @@ def pod = [
 				command: [
 					"java",
 					"-jar", "/mnt/swarm-client/swarm-client.jar",
+					"-master", "http://jenkins:8080",
 					"-name", "my-cloud-sdk-slave",
 					"-labels", "image=google/cloud-sdk"
 				],
@@ -35,6 +36,7 @@ def pod = [
 		dnsPolicy: "Default",
 		restartPolicy: "Never"
 	]
+]
 //Read-Write requests to the Kubernetes API Endpoint can only be made from master
 print kube_create(resource: "pods", payload: pod)
 def thisnode

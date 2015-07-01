@@ -12,6 +12,7 @@
 				"command": [
 					"java",
 					"-jar", "/mnt/swarm-client/swarm-client.jar",
+					"-master", "http://jenkins:8080",
 					"-name", "my-cloud-sdk-slave",
 					"-labels", "image=google/cloud-sdk"
 				],
@@ -36,4 +37,3 @@
 		]
 	}
 }
-
