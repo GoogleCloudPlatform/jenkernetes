@@ -84,7 +84,7 @@ gke-<YOUR-CLUSTER-ID>-node-atq4 us-central1-c n1-standard-1             10.240.9
 gcloud compute firewall-rules create jenkins-webserver --allow TCP:8080 --target-tags gke-<YOUR-CLUSTER-ID>-node
 ```
 
-6. Create the pod that runs your Jenkins Server. (Alternatively if you want to maximize uptime in the event of pod deletion, you can create a [replication controller](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/replication-controller.md) of size 1)
+6. Create the pod that runs your Jenkins Server.
     Inspect the file `setup/master/pod_config.json` and change the "image" field to the image you built and pushed in step 1. This image assumes you are persisting your configuration via Compute Engine Persistent Disk as described in step 4.
 
     ```
@@ -93,6 +93,12 @@ kubectl create -f setup/master/pod_config.json
    You should now be able to access your Jenkins webserver! Find the IP by running:
    ```
 gcloud compute forwarding-rules list
+```
+
+   Alternatively if you want to maximize uptime in the event of pod deletion, you can create a [replication controller](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/replication-controller.md)of size 1
+
+   ```
+kubectl create -f setup/master/replication_controller_config.json
 ```
 
 Go to YOUR-IP:8080 in your webrowser!
