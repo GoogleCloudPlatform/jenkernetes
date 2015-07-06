@@ -2,7 +2,7 @@
 	"metadata": {
 		"name": "my-cloud-sdk-slave"
 	},
-	"apiVersion": "v1beta3",
+	"apiVersion": "v1",
 	"kind": "Pod",
 	"spec": {
 		"containers":[

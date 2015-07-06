@@ -116,7 +116,7 @@ public class KubernetesClient {
 
 	//version string
 	//TODO Add namespace support
-	private static final String PREFIX = "/api/v1beta3/namespaces/default/";
+	private static final String PREFIX = "/api/v1/namespaces/default/";
 
 	private static Object parse(CloseableHttpResponse resp) throws IOException{
 		try{

@@ -3,7 +3,7 @@
 		"name": "jenkins"
 	},
 	"kind": "Service",
-	"apiVersion": "v1beta3",
+	"apiVersion": "v1",
 	"spec": {
 		"createExternalLoadBalancer": true,
 		"ports": [
