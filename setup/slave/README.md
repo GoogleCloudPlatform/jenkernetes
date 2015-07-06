@@ -14,7 +14,7 @@ sudo docker push <mydockerhubid>/jenkins-cloud-sdk-slave
 ```
 3. Create a pod with the given image.
 
-NOTE: We use [DNS](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/dns.md) provided inside the Kubernetes cluster to find the Jenkins master. In the example configuration we assume a Jenkins service with the name "jenkins", which will be reachable within the pod at "http://jenkins:8080".
+   NOTE: We use [DNS](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/dns.md) provided inside the Kubernetes cluster to find the Jenkins master. In the example configuration we assume a Jenkins service with the name "jenkins", which will be reachable within the pod at "http://jenkins:8080".
 
    ```
 kubectl create -f examples/jsonapi/basic_config.json
