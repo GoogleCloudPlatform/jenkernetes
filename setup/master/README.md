@@ -69,38 +69,29 @@ gcloud compute instances delete temp-writer
    ```
 kubectl create -f setup/service_config.json
 ```
-
    Since Jenkins runs a webserver, we also need to create a firewall rule, so our service is accesible from the outside
-
    To do this we need to find the cluster-id given to your Cluster. To do this you can run:
-
-```
+   ```
 gcloud compute instances list
 ```
-
-You should see at least one instance listed with the format:
-
-```
+   You should see at least one instance listed with the format:
+   ```
 NAME                           ZONE          MACHINE_TYPE  PREEMPTIBLE INTERNAL_IP  EXTERNAL_IP     STATUS
 gke-<YOUR-CLUSTER-ID>-node-atq4 us-central1-c n1-standard-1             10.240.92.67 130.211.185.204 RUNNING
 ```
-
-We'll create a firewall rule that allows incoming trafic on port 8080 (the default for the jenkins webserver) to any node in your cluster
-```
+    We'll create a firewall rule that allows incoming trafic on port 8080 (the default for the jenkins webserver) to any node in your cluster
+    ```
 gcloud compute firewall-rules create jenkins-webserver --allow TCP:8080 --target-tags gke-<YOUR-CLUSTER-ID>-node
 ```
 
 6. Create the pod that runs your Jenkins Server. (Alternatively if you want to maximize uptime in the event of pod deletion, you can create a [replication controller](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/replication-controller.md) of size 1)
+    Inspect the file `setup/master/pod_config.json` and change the "image" field to the image you built and pushed in step 1. This image assumes you are persisting your configuration via Compute Engine Persistent Disk as described in step 4.
 
-Inspect the file `setup/master/pod_config.json` and change the "image" field to the image you build and pushed in step 1. This image assumes you are persisting your configuration via Compute Engine Persistent Disk as described in step 4.
-
-```
+    ```
 kubectl create -f setup/master/pod_config.json
 ```
-
-You should now be able to access your Jenkins webserver! Find the IP by running:
-
-```
+   You should now be able to access your Jenkins webserver! Find the IP by running:
+   ```
 gcloud compute forwarding-rules list
 ```
 
