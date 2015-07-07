@@ -5,12 +5,12 @@
 	"kind": "Service",
 	"apiVersion": "v1",
 	"spec": {
-		"createExternalLoadBalancer": true,
 		"ports": [
 			{
 				"name": "webui",
 				"port": 8080,
-				"targetPort": "webui"
+				"targetPort": "webui",
+				"type": "LoadBalancer"
 			},
 			{
 				"name": "slavelistener",
