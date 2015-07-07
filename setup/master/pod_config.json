@@ -11,7 +11,7 @@
 		"containers":[
 			{
 				"name": "jenkinsmaster",
-				"image": "gcr.io/jenkernetes-cloud-devrel/jenkins-master",
+				"image": "waprin/jenkernetes",
 				"imagePullPolicy": "Always",
 				"ports": [
 					{
