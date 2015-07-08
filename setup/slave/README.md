@@ -17,7 +17,7 @@ sudo docker push <mydockerhubid>/jenkins-cloud-sdk-slave
    NOTE: We use [DNS](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/dns.md) provided inside the Kubernetes cluster to find the Jenkins master. In the example configuration we assume a Jenkins service with the name "jenkins", which will be reachable within the pod at "http://jenkins:8080".
 
    ```
-kubectl create -f examples/jsonapi/basic_config.json
+kubectl create -f examples/jsonapi/basic-config.json
 ```
 
 This method has the advantage of leading to (relatively simple) pod configurations, but is frustrating because you must build and push a new image everytime you want to use a new Docker image as a Jenkins slave, or update an existing image. Although you can make these tasks part of your build with plugins like the [Docker Build Step Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Docker+build+step+plugin), this adds extra time to your builds, especially since it prevents Kubernetes from effectively cacheing your images.
