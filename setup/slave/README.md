@@ -5,7 +5,7 @@ To connect to a Docker image to the Jenkins master as a slave, we use the [Jenki
 
 ### Extension
 
-1. Extend the desired Docker image adding the jar as an ENTRYPOINT. For example, you could use the [provided Dockerfile](setup/slave/image/Dockerfile) to create a Jenkins slave with gcloud SDK installed.
+1. Extend the desired Docker image adding the jar as an ENTRYPOINT. For example, you could use the [provided Dockerfile](image/Dockerfile) to create a Jenkins slave with gcloud SDK installed.
 2. Build and push the image
 
    ```
