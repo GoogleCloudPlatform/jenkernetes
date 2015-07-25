@@ -22,7 +22,7 @@ This repository provides the resources and instuctions for running a Jenkins ser
 ## Install Jenkins Master (see setup/master/README.md for more detail)
 
 * `./create_and_format_disk.sh`
-* kubectl create -f setup/master/service_config.json
+* `kubectl create -f setup/master/service_config.json`
 * Run `gcloud compute instances list` and look for YOUR_CLUSTER_ID between an instance name gke-YOUR-CLUSTER-ID-node-
 * `gcloud compute firewall-rules create jenkins-webserver --allow TCP:8080 --target-tags gke-<YOUR-CLUSTER-ID>-node`
 * `kubectl create -f setup/master/pod_config.json`
