@@ -1,0 +1,27 @@
+{
+	"metadata": {
+		"name": "my-cloud-sdk-python-slave-rc"
+	},
+	"apiVersion": "v1",
+	"kind": "ReplicationController",
+	"spec": {
+        "template": {
+            "metadata": {
+                "name": "jenkins-slave",
+                "labels": {
+                    "role": "slave"
+                }
+            },
+            "spec": {
+                "containers":[
+                    {
+                        "name": "jenkins-slave",
+                        "image": "waprin/jenkins-cloud-sdk-python-slave",
+                        "imagePullPolicy": "Always"
+                    }
+                ]
+            }
+        }
+	}
+}
+
