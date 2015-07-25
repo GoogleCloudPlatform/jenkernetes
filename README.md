@@ -8,7 +8,7 @@ This repository provides the resources and instuctions for running a Jenkins ser
  
 * Install [Google Cloud SDK](https://cloud.google.com/sdk/)
 * Install [Docker](https://www.docker.com/)
-* Create a project on the [Google Cloud Console]('https://console.developers.google.com/')
+* Create a project on the [Google Cloud Console](https://console.developers.google.com/)
 
 ## Create a Cluster (see [Container Engine Getting Started](https://cloud.google.com/container-engine/docs/getting-started) for more detail)
 
