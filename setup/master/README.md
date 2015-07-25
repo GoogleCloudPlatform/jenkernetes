@@ -47,7 +47,7 @@ sudo docker push <image-name-of-your-choice>
    Now is also a good time to set up your gcloud defaults:
 
    ```
-gcloud config set compute/ZONE <zone-of-your-cluster>
+gcloud config set compute/zone <zone-of-your-cluster>
 gcloud config set container/cluster <name-of-your-cluster>
 ```
 
