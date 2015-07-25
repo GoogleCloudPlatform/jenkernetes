@@ -30,5 +30,5 @@ This repository provides the resources and instuctions for running a Jenkins ser
 * Go to *JENKINS*:8080 in browser
 
 ## Install Jenkins Slaves (see setups/slave/README.md for more detail)
-* `kubectl create -f examples/python_slave/basic-config.json`
+* `kubectl create -f examples/python_slave/basic-config-rc.json`
 * `kubectl scale --replicas=5 rc my-cloud-sdk-python-slave-rc`
