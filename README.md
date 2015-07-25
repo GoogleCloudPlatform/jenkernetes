@@ -23,7 +23,7 @@ This repository provides the resources and instuctions for running a Jenkins ser
 
 * `./create_and_format_disk.sh`
 * Run `gcloud compute instances list` and look for YOUR_CLUSTER_ID between an instance name gke-YOUR-CLUSTER-ID-node-
-* `gcloud compute firewall-rules create jenkins-webserver --allow TCP:8080 --target-tags gke-<YOUR-CLUSTER-ID>-node1
+* `gcloud compute firewall-rules create jenkins-webserver --allow TCP:8080 --target-tags gke-<YOUR-CLUSTER-ID>-node`
 * `kubectl create -f setup/master/pod_config.json`
 * `gcloud compute forwarding-rules list`
 * Go to *JENKINS*:8080 in browser
