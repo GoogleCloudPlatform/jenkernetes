@@ -27,7 +27,8 @@ This repository provides the resources and instuctions for running a Jenkins ser
 * `gcloud compute firewall-rules create jenkins-webserver --allow TCP:8080 --target-tags gke-<YOUR-CLUSTER-ID>-node`
 * `kubectl create -f setup/master/pod_config.json`
 * `gcloud compute forwarding-rules list`
-* Go to *JENKINS*:8080 in browser
+* Go to *JENKINS*:8080 in browser , where Jenkins is the IP from the
+forwarding rules list
 
 ## Install Jenkins Slaves (see setups/slave/README.md for more detail)
 * `kubectl create -f examples/python_slave/basic-config-rc.json`
