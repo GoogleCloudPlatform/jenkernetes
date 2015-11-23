@@ -1,0 +1,20 @@
+---
+  metadata: 
+    name: "jenkins"
+  kind: "Service"
+  apiVersion: "v1"
+  spec: 
+    ports: 
+      - 
+        name: "webui"
+        port: 8080
+        targetPort: "webui"
+      - 
+        name: "slavelistener"
+        port: 50000
+        targetPort: "slavelistener"
+        nodePort: 30000
+    type: "LoadBalancer"
+    selector: 
+      role: "master"
+    loadBalancerIP: "23.251.159.239"

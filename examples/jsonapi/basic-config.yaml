@@ -1,0 +1,17 @@
+---
+  metadata: 
+    name: "my-cloud-sdk-slave"
+  apiVersion: "v1"
+  kind: "Pod"
+  spec: 
+    containers: 
+      - 
+        name: "jenkins-slave"
+        image: "elibixby/jenkins-cloud-sdk-slave"
+        imagePullPolicy: "Always"
+        args: 
+          - "-name"
+          - "my-cloud-sdk-slave"
+          - "-labels"
+          - "image=google/cloud-sdk"
+

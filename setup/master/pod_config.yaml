@@ -1,0 +1,31 @@
+---
+  metadata: 
+    name: "jenkinsmaster"
+    labels: 
+      role: "master"
+  apiVersion: "v1"
+  kind: "Pod"
+  spec: 
+    containers: 
+      - 
+        name: "jenkinsmaster"
+        image: "waprin/jenkernetes"
+        imagePullPolicy: "Always"
+        ports: 
+          - 
+            name: "webui"
+            containerPort: 8080
+          - 
+            name: "slavelistener"
+            containerPort: 50000
+        volumeMounts: 
+          - 
+            name: "jenkinsconfig"
+            mountPath: "/var/jenkins_home"
+    volumes: 
+      - 
+        name: "jenkinsconfig"
+        gcePersistentDisk: 
+          pdName: "jenkins-config"
+          fsType: "ext4"
+

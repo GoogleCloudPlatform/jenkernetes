@@ -3,3 +3,4 @@ plugin/setup/kubernetes_auth
 plugin/target
 client/target
 .*
+ssl_secrets.yaml

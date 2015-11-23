@@ -1,0 +1,32 @@
+---
+  metadata: 
+    name: "my-cloud-sdk-slave"
+  apiVersion: "v1"
+  kind: "Pod"
+  spec: 
+    containers: 
+      - 
+        name: "jenkins-slave"
+        image: "google/cloud-sdk"
+        command: 
+          - "java"
+          - "-jar"
+          - "/mnt/swarm-client/swarm-client.jar"
+          - "-master"
+          - "http://jenkins:8080"
+          - "-name"
+          - "my-cloud-sdk-slave"
+          - "-labels"
+          - "image=google/cloud-sdk"
+        volumeMounts: 
+          - 
+            name: "swarm-client"
+            mountPath: "/mnt/swarm-client"
+    volumes: 
+      - 
+        name: "swarm-client"
+        GCEPersistentDisk: 
+          pdName: "swarm-client"
+          fsType: "ext4"
+          readOnly: true
+
