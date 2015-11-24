@@ -1,0 +1,35 @@
+---
+  metadata: 
+    name: "jenkinsmasterreplicator"
+  apiVersion: "v1"
+  kind: "ReplicationController"
+  spec: 
+    template: 
+      metadata: 
+        name: "jenkinsmaster"
+        labels: 
+          role: "master"
+      spec: 
+        containers: 
+          - 
+            name: "jenkinsmaster"
+            image: "gcr.io/jenkernetes-cloud-devrel/jenkins-master"
+            imagePullPolicy: "Always"
+            ports: 
+              - 
+                name: "webui"
+                containerPort: 8080
+              - 
+                name: "slavelistener"
+                containerPort: 50000
+            volumeMounts: 
+              - 
+                name: "jenkinsconfig"
+                mountPath: "/var/jenkins_home"
+        volumes: 
+          - 
+            name: "jenkinsconfig"
+            gcePersistentDisk: 
+              pdName: "jenkins-config"
+              fsType: "ext4"
+

@@ -3,7 +3,11 @@
 This repository provides the resources and instuctions for running a Jenkins server and individual Jenkins slaves on a Kubernetes Cluster. It also provides a plugin that allows you to administer the Kubernetes Cluster from within Jenkins workflow scripts, (and WIP administering the Kubernetes Cluster from within the Jenkins Webserver)
 
 Please remember you will be billed for any Container Engine instances. See 
-Contaniner Engine documentation for pricing levels.
+Container Engine documentation for pricing levels.
+
+## Note
+
+Originally this project ran tests in replication controllers, where you would create a new replication controller everytime you had a new image you wanted to run tests on. Going forward, this project will migate to a single builder image type, which can then pull down it's own images and build within that. This will make it so you don't have to interface with Kubernetes in order to add new build images, and (hopefully) will allow Docker builds to take place in the test jobs.
 
 ## Repo Overview
 
@@ -57,7 +61,7 @@ Create the cluster.
 * `gcloud beta container clusters create jenkins`
 Make sure the kubectl is using this new cluster.
 
-* `kubectl config use-context gke_$(gcloud config list | grep project | cut -f 3 -d' ')_${ZONE}_${CLUSTER_NAME}`
+* `gcloud beta container clusters get-credentials jenkins`
 
 ## Install Jenkins Master (see setup/master/README.md for more detail)
 
