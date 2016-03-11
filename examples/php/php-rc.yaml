@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: php55-jenkernetes-slave
+spec:
+  template:
+    metadata:
+      name: 
+        jenkins-php-slave
+        labels:
+            role: slave
+            language: php
+    spec:
+        containers:
+            name: jenkins-php-slave
+            image: waprin/php-55-jenkernetes-slave
+            imagePullPolicy: Always
