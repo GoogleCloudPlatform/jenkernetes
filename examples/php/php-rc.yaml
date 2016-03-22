@@ -5,13 +5,30 @@ metadata:
 spec:
   template:
     metadata:
-      name: 
-        jenkins-php-slave
-        labels:
-            role: slave
-            language: php
+      name: jenkins-php-slave
+      labels:
+        role: slave
+        language: php
     spec:
         containers:
+          -
             name: jenkins-php-slave
-            image: waprin/php-55-jenkernetes-slave
+            image: bshaffer/php55-jenkernetes-slave
             imagePullPolicy: Always
+            volumeMounts:
+              - mountPath: /var/run/docker.sock
+                name: docker-sock
+              - mountPath: /usr/bin/docker
+                name: docker-bin
+              - mountPath: /tmp
+                name: docker-tmp
+        volumes:
+          - name: docker-sock
+            hostPath:
+              path: /var/run/docker.sock
+          - name: docker-bin
+            hostPath:
+              path: /usr/bin/docker
+          - name: docker-tmp
+            hostPath:
+              path: /tmp
