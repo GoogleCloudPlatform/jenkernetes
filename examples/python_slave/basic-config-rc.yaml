@@ -1,17 +1,40 @@
 ---
-  metadata: 
-    name: "my-cloud-sdk-python-slave-rc"
+  metadata:
+    name: "python35-slave"
   apiVersion: "v1"
   kind: "ReplicationController"
-  spec: 
-    template: 
-      metadata: 
+  spec:
+    template:
+      metadata:
         name: "jenkins-slave"
-        labels: 
+        labels:
           role: "slave"
-      spec: 
-        containers: 
-          - 
-            name: "jenkins-slave"
-            image: "waprin/jenkins-cloud-sdk-python-slave"
+          language: python35
+      spec:
+        containers:
+          -
+            name: "jenkins-python-slave"
+            image: "waprin/jenkins_python_slave"
             imagePullPolicy: "Always"
+            volumeMounts:
+              - mountPath: /var/run/docker.sock
+                name: docker-sock
+              - mountPath: /usr/bin/docker
+                name: docker-bin
+              - mountPath: /tmp
+                name: docker-tmp
+              - name: gcloud-service-account
+                mountPath: /etc/gcloud-service-account
+        volumes:
+            - name: docker-sock
+              hostPath:
+                path: /var/run/docker.sock
+            - name: docker-bin
+              hostPath:
+                path: /usr/bin/docker
+            - name: docker-tmp
+              hostPath:
+                path: /tmp
+            - name: gcloud-service-account
+              secret:
+                secretName: gcloud-service-account
