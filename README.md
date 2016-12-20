@@ -70,7 +70,7 @@ This is a helper script that creates a temporary GCE instance in order to format
 * `./create_and_format_disk.sh`
 
 This line creates the Jenkins service.
-* `kubectl create -f setup/master/service_config.json`
+* `kubectl create -f setup/master/service_config.yaml`
 * Run `gcloud compute instances list` and look for YOUR_CLUSTER_ID between an instance name gke-YOUR-CLUSTER-ID-node-
 
 This line makes sure that web traffic to port 8080 is allowed.
@@ -79,7 +79,7 @@ This line makes sure that web traffic to port 8080 is allowed.
 
 This line creates a pod with Jenkins install to back the Jenkins service.
 
-* `kubectl create -f setup/master/pod_config.json`
+* `kubectl create -f setup/master/pod_config.yaml`
 
 Creating the service automatically created a forwarding-rule pointing to our 
 service. We can get the IP by listing the forwarding rule (note that this is 
