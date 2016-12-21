@@ -7,7 +7,7 @@ Container Engine documentation for pricing levels.
 
 ## Note
 
-Originally this project ran tests in replication controllers, where you would create a new replication controller everytime you had a new image you wanted to run tests on. Going forward, this project will migate to a single builder image type, which can then pull down it's own images and build within that. This will make it so you don't have to interface with Kubernetes in order to add new build images, and (hopefully) will allow Docker builds to take place in the test jobs.
+Originally this project ran tests in replication controllers, where you would create a new replication controller everytime you had a new image you wanted to run tests on. Going forward, this project will migrate to a single builder image type, which can then pull down its own images and build within that. This will make it so you don't have to interface with Kubernetes in order to add new build images, and (hopefully) will allow Docker builds to take place in the test jobs.
 
 ## Repo Overview
 
