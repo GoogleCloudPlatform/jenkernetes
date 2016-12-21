@@ -91,7 +91,7 @@ forwarding rules list
 
 ## Install Jenkins Slaves (see setups/slave/README.md for more detail)
 
- This line creates a replacation controller using the slave image created in one of the examples.
+ This line creates a replication controller using the slave image created in one of the examples.
 
 * `kubectl create -f examples/python_slave/basic-config-rc.json`
 
