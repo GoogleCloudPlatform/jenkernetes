@@ -71,8 +71,8 @@ This is a helper script that creates a temporary GCE instance in order to format
 
 This line creates the Jenkins service.
 * `kubectl create -f setup/master/service_config.yaml`
-* Run `gcloud compute instances list` to identify your instance names.
-* Then, run `gcloud compute instances describe <YOUR-INSTANCE-NAME>` and look for YOUR_CLUSTER_TAG of the form `gke-<YOUR-CLUSTER-TAG>-node`.
+
+Run `gcloud compute instances list` to identify your instance names. Then, run `gcloud compute instances describe <YOUR-INSTANCE-NAME>` and look for YOUR_CLUSTER_TAG of the form `gke-<YOUR-CLUSTER-TAG>-node`.
 
 This line makes sure that web traffic to port 8080 is allowed.
 
