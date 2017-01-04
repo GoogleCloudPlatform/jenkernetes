@@ -76,7 +76,7 @@ gcloud compute instances list
 ```
    You should see at least one instance listed with the format:
    ```
-NAME                                    	ZONE          MACHINE_TYPE  PREEMPTIBLE INTERNAL_IP  EXTERNAL_IP     STATUS
+NAME				 		ZONE          MACHINE_TYPE  PREEMPTIBLE INTERNAL_IP  EXTERNAL_IP     STATUS
 gke-<YOUR-CLUSTER-ID>-<FOUR-CHARACTER-NODE-ID>  us-central1-c n1-standard-1             10.240.92.67 130.211.185.204 RUNNING
 ```
     We'll create a firewall rule that allows incoming trafic on port 8080 (the default for the jenkins webserver) to any node in your cluster
