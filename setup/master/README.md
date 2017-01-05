@@ -76,18 +76,30 @@ kubectl create -f setup/master/service_config.yaml
     ```
 kubectl create -f setup/master/pod_config.yaml
 ```
-   You should now be able to access your Jenkins webserver! Find the IP under the **EXTERNAL-IP** column by running the following command:
+
+7. Since Jenkins runs a webserver, we also need to create a firewall rule to access our service from the outside.
+   Find the cluster-id given to your Cluster by running `gcloud compute instances list`.		
+   
+   You should see at least one instance listed with the format:		
+   ```		
+   NAME				 							ZONE          MACHINE_TYPE  PREEMPTIBLE INTERNAL_IP  EXTERNAL_IP     STATUS		
+   gke-<YOUR-CLUSTER-ID>-<FOUR-CHARACTER-NODE-ID>  us-central1-c n1-standard-1             10.240.92.67 130.211.185.204 RUNNING		
+   ```		
+   Use the following command to create a firewall rule that allows incoming traffic on port 8080 (the default for the Jenkins webserver) to any node in your cluster:
+   ```		
+   gcloud compute firewall-rules create jenkins-webserver --allow TCP:8080 --target-tags gke-<YOUR-CLUSTER-ID>		
+   ```
+ 
+8. You should now be able to access your Jenkins webserver! Find the IP under the **EXTERNAL-IP** column by running the following command:
    ```
 kubectl get services
 ```
 
-   Alternatively if you want to maximize uptime in the event of pod deletion, you can create a [replication controller](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/replication-controller.md)of size 1
+   Alternatively if you want to maximize uptime in the event of pod deletion, you can create a [replication controller](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/replication-controller.md) of size 1
 
    ```
 kubectl create -f setup/master/replication_controller_config.yaml
 ```
-
-Go to YOUR-IP:8080 in your webrowser!
 
 Now that you have a Jenkins master running in your Kubernetes cluster, check out [slave setup](setup/slave/) to find out how to run any Docker image as a Jenkins slave in your cluster!
 
