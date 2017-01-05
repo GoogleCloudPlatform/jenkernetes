@@ -69,7 +69,7 @@ gcloud compute instances delete temp-writer
    ```
 kubectl create -f setup/master/service_config.json
 ```
-   Since Jenkins runs a webserver, we also need to create a firewall rule, so our service is accesible from the outside
+   Since Jenkins runs a webserver, we also need to create a firewall rule, so our service is accessible from the outside
    To do this we need to find the cluster-id given to your Cluster. To do this you can run:
    ```
 gcloud compute instances list
