@@ -76,15 +76,15 @@ This line creates a pod with Jenkins install to back the Jenkins service.
 
 * `kubectl create -f setup/master/pod_config.yaml`
 
-Creating the service automatically created a forwarding-rule pointing to our 
-service. We can get the IP by listing the forwarding rule (note that this is 
-an ephemeral IP).
-* kubectl get services`
+Creating the service automatically assigns it an external (ephemeral) IP, which we can find by listing Kubernetes services.
+
+* `kubectl get services`
+
 Go to `<YOUR-JENKINS-IP>:8080` in your browser, where `YOUR-JENKINS-IP` is the IP under the **EXTERNAL-IP** column.
 
 ## Install Jenkins Slaves (see setups/slave/README.md for more detail)
 
- This line creates a replication controller using the slave image created in one of the examples.
+This line creates a replication controller using the slave image created in one of the examples.
 
 * `kubectl create -f examples/python_slave/basic-config-rc.json`
 
