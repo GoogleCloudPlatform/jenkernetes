@@ -59,7 +59,8 @@ Set the project the gcloud command will use.
 Create the cluster.
 
 * `gcloud beta container clusters create jenkins`
-Make sure the kubectl is using this new cluster.
+
+Make sure kubectl is using this new cluster.
 
 * `gcloud beta container clusters get-credentials jenkins`
 
