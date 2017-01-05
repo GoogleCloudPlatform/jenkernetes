@@ -92,7 +92,7 @@ kubectl create -f setup/master/pod_config.yaml
 ```
    You should now be able to access your Jenkins webserver! Find the IP by running:
    ```
-gcloud compute forwarding-rules list
+kubectl get services
 ```
 
    Alternatively if you want to maximize uptime in the event of pod deletion, you can create a [replication controller](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/replication-controller.md)of size 1
