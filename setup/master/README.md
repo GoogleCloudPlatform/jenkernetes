@@ -98,8 +98,8 @@ kubectl get services
    Alternatively if you want to maximize uptime in the event of pod deletion, you can create a [replication controller](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/replication-controller.md) of size 1
 
    ```
-kubectl create -f setup/master/replication_controller_config.yaml
-```
+   kubectl create -f setup/master/replication_controller_config.yaml
+   ```
 
 Now that you have a Jenkins master running in your Kubernetes cluster, check out [slave setup](setup/slave/) to find out how to run any Docker image as a Jenkins slave in your cluster!
 
