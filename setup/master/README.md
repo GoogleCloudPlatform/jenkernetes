@@ -98,7 +98,7 @@ gcloud compute forwarding-rules list
    Alternatively if you want to maximize uptime in the event of pod deletion, you can create a [replication controller](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/replication-controller.md)of size 1
 
    ```
-kubectl create -f setup/master/replication_controller_config.json
+kubectl create -f setup/master/replication_controller_config.yaml
 ```
 
 Go to YOUR-IP:8080 in your webrowser!
