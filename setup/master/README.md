@@ -67,7 +67,7 @@ gcloud compute instances delete temp-writer
    gcloud comes bundled with [kubectl](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/kubectl.md) which we will use to administer our cluster.
 
    ```
-kubectl create -f setup/master/service_config.json
+kubectl create -f setup/master/service_config.yaml
 ```
    Since Jenkins runs a webserver, we also need to create a firewall rule, so our service is accessible from the outside
    To do this we need to find the cluster-id given to your Cluster. To do this you can run:
@@ -85,10 +85,10 @@ gcloud compute firewall-rules create jenkins-webserver --allow TCP:8080 --target
 ```
 
 6. Create the pod that runs your Jenkins Server.
-    Inspect the file `setup/master/pod_config.json` and change the "image" field to the image you built and pushed in step 1. This image assumes you are persisting your configuration via Compute Engine Persistent Disk as described in step 4.
+    Inspect the file `setup/master/pod_config.yaml` and change the "image" field to the image you built and pushed in step 1. This image assumes you are persisting your configuration via Compute Engine Persistent Disk as described in step 4.
 
     ```
-kubectl create -f setup/master/pod_config.json
+kubectl create -f setup/master/pod_config.yaml
 ```
    You should now be able to access your Jenkins webserver! Find the IP by running:
    ```
