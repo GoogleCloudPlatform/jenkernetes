@@ -70,6 +70,7 @@ This is a helper script that creates a temporary GCE instance in order to format
 
 * `./create_and_format_disk.sh`
 
+### Creating GKE objects
 This line creates the Jenkins service.
 * `kubectl create -f setup/master/service_config.yaml`
 
@@ -77,6 +78,14 @@ This line creates a pod with Jenkins install to back the Jenkins service.
 
 * `kubectl create -f setup/master/pod_config.yaml`
 
+### Configuring GKE's firewall
+Run `gcloud compute instances list` to identify your instance names. Then, run `gcloud compute instances describe <YOUR-INSTANCE-NAME>` and look for YOUR_CLUSTER_TAG of the form `gke-<YOUR-CLUSTER-TAG>-<NODE-ID>`.		
+		
+This line makes sure that web traffic to port 8080 is allowed.
+
+* `gcloud compute firewall-rules create jenkins-webserver --allow TCP:8080 --target-tags gke-<YOUR-CLUSTER-TAG>-node`		
+
+### Viewing your Jenkins instance
 Creating the service automatically assigns it an external (ephemeral) IP, which we can find by listing Kubernetes services.
 
 * `kubectl get services`
