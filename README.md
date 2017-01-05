@@ -72,12 +72,6 @@ This is a helper script that creates a temporary GCE instance in order to format
 This line creates the Jenkins service.
 * `kubectl create -f setup/master/service_config.yaml`
 
-Run `gcloud compute instances list` to identify your instance names. Then, run `gcloud compute instances describe <YOUR-INSTANCE-NAME>` and look for YOUR_CLUSTER_TAG of the form `gke-<YOUR-CLUSTER-TAG>-<NODE-ID>`.
-
-This line makes sure that web traffic to port 8080 is allowed.
-
-* `gcloud compute firewall-rules create jenkins-webserver --allow TCP:8080 --target-tags gke-<YOUR-CLUSTER-TAG>-node`
-
 This line creates a pod with Jenkins install to back the Jenkins service.
 
 * `kubectl create -f setup/master/pod_config.yaml`
@@ -85,9 +79,8 @@ This line creates a pod with Jenkins install to back the Jenkins service.
 Creating the service automatically created a forwarding-rule pointing to our 
 service. We can get the IP by listing the forwarding rule (note that this is 
 an ephemeral IP).
-* `gcloud compute forwarding-rules list`
-* Go to *JENKINS*:8080 in browser , where Jenkins is the IP from the
-forwarding rules list
+* kubectl get services`
+Go to `<YOUR-JENKINS-IP>:8080` in your browser, where `YOUR-JENKINS-IP` is the IP under the **EXTERNAL-IP** column.
 
 ## Install Jenkins Slaves (see setups/slave/README.md for more detail)
 
