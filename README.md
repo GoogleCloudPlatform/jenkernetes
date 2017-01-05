@@ -104,4 +104,4 @@ This line scales that replication controller to 5 slave pods.
 
 To stop billing, make sure you delete the cluster when you are finished.
 
-* gcloud beta container clusters delete jenkins
+* `gcloud beta container clusters delete jenkins`
