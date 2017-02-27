@@ -4,7 +4,7 @@ RUN add-apt-repository -y ppa:fkrull/deadsnakes
 RUN apt-get -y update && \
     apt-get -y install \
         git wget \
-        python-pip python-dev python3-dev python3.5 python3.5-dev \
+        python-pip python-dev python3-dev python3.5 python3.5-dev python3.6 python3.6-dev \
         openjdk-7-jre openjdk-7-jdk maven \
         libffi-dev libssl-dev libxml2-dev \
         libxslt1-dev libpq-dev libmysqlclient-dev libcurl4-openssl-dev \
