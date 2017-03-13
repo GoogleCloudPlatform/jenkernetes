@@ -1,40 +1,39 @@
----
-  metadata:
-    name: "python35-slave"
-  apiVersion: "v1"
-  kind: "ReplicationController"
-  spec:
-    template:
-      metadata:
-        name: "jenkins-slave"
-        labels:
-          role: "slave"
-          language: python35
-      spec:
-        containers:
-          -
-            name: "jenkins-python-slave"
-            image: "waprin/jenkins_python_slave"
-            imagePullPolicy: "Always"
-            volumeMounts:
-              - mountPath: /var/run/docker.sock
-                name: docker-sock
-              - mountPath: /usr/bin/docker
-                name: docker-bin
-              - mountPath: /tmp
-                name: docker-tmp
-              - name: gcloud-service-account
-                mountPath: /etc/gcloud-service-account
-        volumes:
-            - name: docker-sock
-              hostPath:
-                path: /var/run/docker.sock
-            - name: docker-bin
-              hostPath:
-                path: /usr/bin/docker
-            - name: docker-tmp
-              hostPath:
-                path: /tmp
-            - name: gcloud-service-account
-              secret:
-                secretName: gcloud-service-account
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "python-worker"
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: "jenkins-python-worker"
+      labels:
+        role: worker
+        language: python35
+    spec:
+      containers:
+      - name: "jenkins-python-worker"
+        image: "waprin/jenkins_python_slave"
+        imagePullPolicy: "Always"
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-sock
+        - mountPath: /usr/bin/docker
+          name: docker-bin
+        - mountPath: /tmp
+          name: docker-tmp
+        - name: gcloud-service-account
+          mountPath: /etc/gcloud-service-account
+      volumes:
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock
+      - name: docker-bin
+        hostPath:
+          path: /usr/bin/docker
+      - name: docker-tmp
+        hostPath:
+          path: /tmp
+      - name: gcloud-service-account
+        secret:
+          secretName: gcloud-service-account
