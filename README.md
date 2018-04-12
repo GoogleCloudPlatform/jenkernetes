@@ -1,3 +1,9 @@
+![status: inactive](https://img.shields.io/badge/status-inactive-red.svg)
+
+This project is no longer actively developed or maintained.
+
+For new work on this check out [Jenkins on Kubernetes Engine](https://cloud.google.com/solutions/jenkins-on-kubernetes-engine).
+
 # Jenkernetes
 
 This repository provides the resources and instructions for running a Jenkins server and individual Jenkins slaves on a Kubernetes Cluster. It also provides a plugin that allows you to administer the Kubernetes Cluster from within Jenkins workflow scripts, (and WIP administering the Kubernetes Cluster from within the Jenkins Webserver)
