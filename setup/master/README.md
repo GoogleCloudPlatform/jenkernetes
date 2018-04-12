@@ -67,41 +67,39 @@ gcloud compute instances delete temp-writer
    gcloud comes bundled with [kubectl](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/kubectl.md) which we will use to administer our cluster.
 
    ```
-kubectl create -f setup/master/service_config.json
-```
-   Since Jenkins runs a webserver, we also need to create a firewall rule, so our service is accesible from the outside
-   To do this we need to find the cluster-id given to your Cluster. To do this you can run:
-   ```
-gcloud compute instances list
-```
-   You should see at least one instance listed with the format:
-   ```
-NAME                           ZONE          MACHINE_TYPE  PREEMPTIBLE INTERNAL_IP  EXTERNAL_IP     STATUS
-gke-<YOUR-CLUSTER-ID>-node-atq4 us-central1-c n1-standard-1             10.240.92.67 130.211.185.204 RUNNING
-```
-    We'll create a firewall rule that allows incoming trafic on port 8080 (the default for the jenkins webserver) to any node in your cluster
-    ```
-gcloud compute firewall-rules create jenkins-webserver --allow TCP:8080 --target-tags gke-<YOUR-CLUSTER-ID>-node
+kubectl create -f setup/master/service_config.yaml
 ```
 
 6. Create the pod that runs your Jenkins Server.
-    Inspect the file `setup/master/pod_config.json` and change the "image" field to the image you built and pushed in step 1. This image assumes you are persisting your configuration via Compute Engine Persistent Disk as described in step 4.
+    Inspect the file `setup/master/pod_config.yaml` and change the "image" field to the image you built and pushed in step 1. This image assumes you are persisting your configuration via Compute Engine Persistent Disk as described in step 4.
 
     ```
-kubectl create -f setup/master/pod_config.json
+kubectl create -f setup/master/pod_config.yaml
 ```
-   You should now be able to access your Jenkins webserver! Find the IP by running:
+
+7. Since Jenkins runs a webserver, we also need to create a firewall rule to access our service from the outside.
+   Find the cluster-id given to your Cluster by running `gcloud compute instances list`.		
+   
+   You should see at least one instance listed with the format:		
+   ```		
+   NAME				 							ZONE          MACHINE_TYPE  PREEMPTIBLE INTERNAL_IP  EXTERNAL_IP     STATUS		
+   gke-<YOUR-CLUSTER-ID>-<FOUR-CHARACTER-NODE-ID>  us-central1-c n1-standard-1             10.240.92.67 130.211.185.204 RUNNING		
+   ```		
+   Use the following command to create a firewall rule that allows incoming traffic on port 8080 (the default for the Jenkins webserver) to any node in your cluster:
+   ```		
+   gcloud compute firewall-rules create jenkins-webserver --allow TCP:8080 --target-tags gke-<YOUR-CLUSTER-ID>		
    ```
-gcloud compute forwarding-rules list
+ 
+8. You should now be able to access your Jenkins webserver! Find the IP under the **EXTERNAL-IP** column by running the following command:
+   ```
+kubectl get services
 ```
 
-   Alternatively if you want to maximize uptime in the event of pod deletion, you can create a [replication controller](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/replication-controller.md)of size 1
+   Alternatively if you want to maximize uptime in the event of pod deletion, you can create a [replication controller](https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/replication-controller.md) of size 1
 
    ```
-kubectl create -f setup/master/replication_controller_config.json
-```
-
-Go to YOUR-IP:8080 in your webrowser!
+   kubectl create -f setup/master/replication_controller_config.yaml
+   ```
 
 Now that you have a Jenkins master running in your Kubernetes cluster, check out [slave setup](setup/slave/) to find out how to run any Docker image as a Jenkins slave in your cluster!
 

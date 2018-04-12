@@ -1,13 +1,13 @@
 # Jenkernetes
 
-This repository provides the resources and instuctions for running a Jenkins server and individual Jenkins slaves on a Kubernetes Cluster. It also provides a plugin that allows you to administer the Kubernetes Cluster from within Jenkins workflow scripts, (and WIP administering the Kubernetes Cluster from within the Jenkins Webserver)
+This repository provides the resources and instructions for running a Jenkins server and individual Jenkins slaves on a Kubernetes Cluster. It also provides a plugin that allows you to administer the Kubernetes Cluster from within Jenkins workflow scripts, (and WIP administering the Kubernetes Cluster from within the Jenkins Webserver)
 
 Please remember you will be billed for any Container Engine instances. See 
 Container Engine documentation for pricing levels.
 
 ## Note
 
-Originally this project ran tests in replication controllers, where you would create a new replication controller everytime you had a new image you wanted to run tests on. Going forward, this project will migate to a single builder image type, which can then pull down it's own images and build within that. This will make it so you don't have to interface with Kubernetes in order to add new build images, and (hopefully) will allow Docker builds to take place in the test jobs.
+Originally this project ran tests in replication controllers, where you would create a new replication controller everytime you had a new image you wanted to run tests on. Going forward, this project will migrate to a single builder image type, which can then pull down its own images and build within that. This will make it so you don't have to interface with Kubernetes in order to add new build images, and (hopefully) will allow Docker builds to take place in the test jobs.
 
 ## Repo Overview
 
@@ -59,7 +59,8 @@ Set the project the gcloud command will use.
 Create the cluster.
 
 * `gcloud beta container clusters create jenkins`
-Make sure the kubectl is using this new cluster.
+
+Make sure kubectl is using this new cluster.
 
 * `gcloud beta container clusters get-credentials jenkins`
 
@@ -69,28 +70,31 @@ This is a helper script that creates a temporary GCE instance in order to format
 
 * `./create_and_format_disk.sh`
 
+### Creating GKE objects
 This line creates the Jenkins service.
-* `kubectl create -f setup/master/service_config.json`
-* Run `gcloud compute instances list` and look for YOUR_CLUSTER_ID between an instance name gke-YOUR-CLUSTER-ID-node-
-
-This line makes sure that web traffic to port 8080 is allowed.
-
-* `gcloud compute firewall-rules create jenkins-webserver --allow TCP:8080 --target-tags gke-<YOUR-CLUSTER-ID>-node`
+* `kubectl create -f setup/master/service_config.yaml`
 
 This line creates a pod with Jenkins install to back the Jenkins service.
 
-* `kubectl create -f setup/master/pod_config.json`
+* `kubectl create -f setup/master/pod_config.yaml`
 
-Creating the service automatically created a forwarding-rule pointing to our 
-service. We can get the IP by listing the forwarding rule (note that this is 
-an ephemeral IP).
-* `gcloud compute forwarding-rules list`
-* Go to *JENKINS*:8080 in browser , where Jenkins is the IP from the
-forwarding rules list
+### Configuring GKE's firewall
+Run `gcloud compute instances list` to identify your instance names. Then, run `gcloud compute instances describe <YOUR-INSTANCE-NAME>` and look for YOUR_CLUSTER_TAG of the form `gke-<YOUR-CLUSTER-TAG>-<NODE-ID>`.		
+		
+This line makes sure that web traffic to port 8080 is allowed.
+
+* `gcloud compute firewall-rules create jenkins-webserver --allow TCP:8080 --target-tags gke-<YOUR-CLUSTER-TAG>-node`		
+
+### Viewing your Jenkins instance
+Creating the service automatically assigns it an external (ephemeral) IP, which we can find by listing Kubernetes services.
+
+* `kubectl get services`
+
+Go to `<YOUR-JENKINS-IP>:8080` in your browser, where `YOUR-JENKINS-IP` is the IP under the **EXTERNAL-IP** column.
 
 ## Install Jenkins Slaves (see setups/slave/README.md for more detail)
 
- This line creates a replacation controller using the slave image created in one of the examples.
+This line creates a replication controller using the slave image created in one of the examples.
 
 * `kubectl create -f examples/python_slave/basic-config-rc.json`
 
@@ -103,4 +107,4 @@ This line scales that replication controller to 5 slave pods.
 
 To stop billing, make sure you delete the cluster when you are finished.
 
-* gcloud beta container clusters delete jenkins
+* `gcloud beta container clusters delete jenkins`
